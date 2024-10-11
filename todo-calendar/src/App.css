@@ -1,11 +1,11 @@
- * {
+/* 모든 요소의 기본 패딩 및 마진 제거 */
+* {
   padding: 0;
   margin: 0;
- }
- body {
+}
+
+body {
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0; /* 여백 제거 */
   height: 100vh; /* 전체 높이 사용 */
   display: flex; /* Flexbox 사용 */
   align-items: center; /* 세로 가운데 정렬 */
@@ -22,14 +22,12 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-
 h1 {
   margin-top: 30px;
   margin-bottom: 10px;
   text-align: center;
   color: #333;
 }
-
 
 .react-calendar {
   border: none;
@@ -43,7 +41,6 @@ h1 {
   background: #ffcc00; 
   color: white; 
 }
-
 
 .react-calendar__tile--active {
   background: #007bff; 
@@ -81,8 +78,7 @@ input[type="text"] {
   font-size: 16px;
 }
 
-
-  button {
+button {
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
@@ -90,12 +86,12 @@ input[type="text"] {
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s;
+  margin: 5px;
 }
 
 button:hover {
   background-color: #0056b3;
-}  
-
+}
 
 ul {
   list-style-type: none;
@@ -114,14 +110,14 @@ li:last-child {
   border-bottom: none;
 }
 
-
 li button {
   background-color: #dc3545;
 }
 
 li button:hover {
   background-color: #c82333;
-} 
+}
+
 /* 다크 모드 스타일 */
 .dark-mode {
   width: 100vw;
@@ -131,9 +127,11 @@ li button:hover {
   align-items: center; /* 세로 가운데 정렬 */
   justify-content: center; /* 가로 가운데 정렬 */
 }
+
 .dark-mode h1 {
   color: #fff;
 }
+
 .dark-mode .container {
   background-color: #333;
 }
@@ -147,4 +145,5 @@ li button:hover {
 .dark-mode select {
   background: #333;
   border: 1px solid #555;
+  color: white; /* 글자 색상 */
 }

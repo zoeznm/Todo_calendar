@@ -5,6 +5,7 @@ import './App.css';
 
 function App() {
     const [date, setDate] = useState(new Date());
+    const [view, setView] = useState('month'); // 'month' 또는 'year'로 설정
     const [todos, setTodos] = useState({});
     const [input, setInput] = useState('');
     const [priority, setPriority] = useState(1); // 기본 우선순위 설정
@@ -53,6 +54,10 @@ function App() {
         setIsDarkMode(!isDarkMode);
     };
 
+    const toggleView = () => {
+        setView((prevView) => (prevView === 'month' ? 'year' : 'month'));
+    };
+
     return (
         <div className={isDarkMode ? 'dark-mode' : ''}>
             <div className="container">
@@ -60,10 +65,15 @@ function App() {
                 <button onClick={toggleDarkMode}>
                     {isDarkMode ? 'Light Mode' : 'Dark Mode'}
                 </button>
+                <button onClick={toggleView}>
+                    {view === 'month' ? 'Year View' : 'Month View'}
+                </button>
                 <Calendar
                     onChange={handleDateChange}
                     value={date}
                     tileClassName={tileClassName}
+                    view={view} // 현재 뷰 설정
+                    onViewChange={({ activeStartDate }) => setDate(activeStartDate)} // 뷰 변경 시 날짜 업데이트
                 />
                 <div className="todo-list">
                     <input

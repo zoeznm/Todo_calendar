@@ -147,3 +147,33 @@ li button:hover {
   border: 1px solid #555;
   color: white; /* 글자 색상 */
 }
+
+@media (max-width: 600px) {
+  .container {
+    padding: 10px; /* 패딩 감소 */
+  }
+
+  h1 {
+    font-size: 24px; /* 글자 크기 조정 */
+  }
+
+  input[type="text"],
+  .todo-list select {
+    width: 90%; /* 너비 100%로 조정 */
+    margin: 5px 0; /* 마진 조정 */
+  }
+
+  button {
+    width: 100%; /* 버튼 너비 100%로 조정 */
+  }
+
+  li {
+    flex-direction: column; /* 리스트 아이템 세로 정렬 */
+    align-items: flex-start; /* 왼쪽 정렬 */
+  }
+
+  li button {
+    width: 100%; /* 버튼 너비 100%로 조정 */
+    margin-top: 5px; /* 버튼 사이의 마진 추가 */
+  }
+}

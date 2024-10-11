@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css'; // 달력 CSS 스타일 import
-import './App.css'; // CSS 파일 import
+import 'react-calendar/dist/Calendar.css';
+import './App.css';
 
 function App() {
     const [date, setDate] = useState(new Date());
@@ -14,28 +14,36 @@ function App() {
 
     const addTodo = () => {
         if (!input) return;
-        const dateString = date.toISOString().split('T')[0]; // 날짜를 'YYYY-MM-DD' 형식으로 변환
+        const dateString = date.toISOString().split('T')[0];
         setTodos((prevTodos) => ({
             ...prevTodos,
-            [dateString]: [...(prevTodos[dateString] || []), input],
+            [dateString]: [
+                ...(prevTodos[dateString] || []),
+                { text: input, completed: false },
+            ],
         }));
         setInput('');
     };
 
-    const deleteTodo = (dateString, index) => {
+    const toggleTodo = (dateString, index) => {
         setTodos((prevTodos) => {
-            const newTodos = [...prevTodos[dateString]];
-            newTodos.splice(index, 1);
-            return { ...prevTodos, [dateString]: newTodos };
+            const newTodos = [...(prevTodos[dateString])]; // 기존 투두 리스트 복사
+            newTodos[index] = { ...newTodos[index], completed: !newTodos[index].completed }; // completed 상태 토글
+            return { ...prevTodos, [dateString]: newTodos }; // 업데이트된 투두 리스트 반환
         });
     };
 
-    // 특정 날짜에 색상 적용
+    const deleteTodo = (dateString, index) => {
+        setTodos((prevTodos) => {
+            const newTodos = [...(prevTodos[dateString])]; // 기존 투두 리스트 복사
+            newTodos.splice(index, 1); // 삭제할 인덱스의 항목 삭제
+            return { ...prevTodos, [dateString]: newTodos }; // 업데이트된 투두 리스트 반환
+        });
+    };
+
     const tileClassName = ({ date }) => {
         const dateString = date.toISOString().split('T')[0];
-        if (todos[dateString]) {
-            return 'has-todos'; // 색상을 적용할 클래스 이름
-        }
+        return todos[dateString] ? 'has-todos' : null; // 해당 날짜에 투두가 있으면 클래스 추가
     };
 
     return (
@@ -44,7 +52,7 @@ function App() {
             <Calendar
                 onChange={handleDateChange}
                 value={date}
-                tileClassName={tileClassName} // 클래스 이름 설정
+                tileClassName={tileClassName}
             />
             <div className="todo-list">
                 <input
@@ -57,7 +65,14 @@ function App() {
                 <ul>
                     {(todos[date.toISOString().split('T')[0]] || []).map((todo, index) => (
                         <li key={index}>
-                            {todo}
+                            <input
+                                type="checkbox"
+                                checked={todo.completed} // 체크박스 상태를 todo.completed에 바인딩
+                                onChange={() => toggleTodo(date.toISOString().split('T')[0], index)} // 체크박스 클릭 시 toggleTodo 호출
+                            />
+                            <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
+                                {todo.text}
+                            </span>
                             <button onClick={() => deleteTodo(date.toISOString().split('T')[0], index)}>Delete</button>
                         </li>
                     ))}

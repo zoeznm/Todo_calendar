@@ -7,6 +7,7 @@ function App() {
     const [date, setDate] = useState(new Date());
     const [todos, setTodos] = useState({});
     const [input, setInput] = useState('');
+    const [priority, setPriority] = useState(1); // 기본 우선순위 설정
 
     const handleDateChange = (newDate) => {
         setDate(newDate);
@@ -19,32 +20,37 @@ function App() {
             ...prevTodos,
             [dateString]: [
                 ...(prevTodos[dateString] || []),
-                { text: input, completed: false },
+                { text: input, completed: false, priority }, // 우선순위 추가
             ],
         }));
         setInput('');
+        setPriority(1); // 입력 후 우선순위 초기화
     };
 
     const toggleTodo = (dateString, index) => {
         setTodos((prevTodos) => {
-            const newTodos = [...(prevTodos[dateString])]; // 기존 투두 리스트 복사
-            newTodos[index] = { ...newTodos[index], completed: !newTodos[index].completed }; // completed 상태 토글
-            return { ...prevTodos, [dateString]: newTodos }; // 업데이트된 투두 리스트 반환
+            const newTodos = [...(prevTodos[dateString])];
+            newTodos[index] = { ...newTodos[index], completed: !newTodos[index].completed };
+            return { ...prevTodos, [dateString]: newTodos };
         });
     };
 
     const deleteTodo = (dateString, index) => {
         setTodos((prevTodos) => {
-            const newTodos = [...(prevTodos[dateString])]; // 기존 투두 리스트 복사
-            newTodos.splice(index, 1); // 삭제할 인덱스의 항목 삭제
-            return { ...prevTodos, [dateString]: newTodos }; // 업데이트된 투두 리스트 반환
+            const newTodos = [...(prevTodos[dateString])];
+            newTodos.splice(index, 1);
+            return { ...prevTodos, [dateString]: newTodos };
         });
     };
 
     const tileClassName = ({ date }) => {
         const dateString = date.toISOString().split('T')[0];
-        return todos[dateString] ? 'has-todos' : null; // 해당 날짜에 투두가 있으면 클래스 추가
+        return todos[dateString] ? 'has-todos' : null;
     };
+
+    // const sortedTodos = (todosArray) => {
+    //     return todosArray.sort((a, b) => a.priority - b.priority); // 우선순위로 정렬
+    // };
 
     return (
         <div>
@@ -61,21 +67,26 @@ function App() {
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Add a To-Do"
                 />
+                <select value={priority} onChange={(e) => setPriority(Number(e.target.value))}>
+                    <option value={1}>High Priority</option>
+                    <option value={2}>Medium Priority</option>
+                    <option value={3}>Low Priority</option>
+                </select>
                 <button onClick={addTodo}>Add</button>
                 <ul>
                     {(todos[date.toISOString().split('T')[0]] || []).map((todo, index) => (
                         <li key={index}>
                             <input
                                 type="checkbox"
-                                checked={todo.completed} // 체크박스 상태를 todo.completed에 바인딩
-                                onChange={() => toggleTodo(date.toISOString().split('T')[0], index)} // 체크박스 클릭 시 toggleTodo 호출
+                                checked={todo.completed}
+                                onChange={() => toggleTodo(date.toISOString().split('T')[0], index)}
                             />
                             <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
-                                {todo.text}
+                                {todo.text} (Priority: {todo.priority})
                             </span>
                             <button onClick={() => deleteTodo(date.toISOString().split('T')[0], index)}>Delete</button>
                         </li>
-                    ))}
+                    )).sort((a, b) => a.props.children[1].props.children.split(': ')[1] - b.props.children[1].props.children.split(': ')[1])}
                 </ul>
             </div>
         </div>

@@ -1,13 +1,31 @@
- 
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f7f9fc;
+ * {
+  padding: 0;
   margin: 0;
+ }
+ body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0; /* 여백 제거 */
+  height: 100vh; /* 전체 높이 사용 */
+  display: flex; /* Flexbox 사용 */
+  align-items: center; /* 세로 가운데 정렬 */
+  justify-content: center; /* 가로 가운데 정렬 */
+  background-color: #f8f9fa; /* 기본 배경색 */
+}
+
+.container {
+  max-width: 600px; /* 최대 너비 */
+  width: 100%; /* 너비 100% */
   padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 
 h1 {
+  margin-top: 30px;
+  margin-bottom: 10px;
   text-align: center;
   color: #333;
 }
@@ -104,3 +122,29 @@ li button {
 li button:hover {
   background-color: #c82333;
 } 
+/* 다크 모드 스타일 */
+.dark-mode {
+  width: 100vw;
+  height: 100vh;
+  background-color: #121212;
+  display: flex; /* Flexbox 사용 */
+  align-items: center; /* 세로 가운데 정렬 */
+  justify-content: center; /* 가로 가운데 정렬 */
+}
+.dark-mode h1 {
+  color: #fff;
+}
+.dark-mode .container {
+  background-color: #333;
+}
+
+.dark-mode .todo-list {
+  background: #1e1e1e;
+  border: 1px solid #444;
+}
+
+.dark-mode input[type="text"],
+.dark-mode select {
+  background: #333;
+  border: 1px solid #555;
+}

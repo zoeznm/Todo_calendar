@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./App.css";
 import { tileClassName } from "./utils/tileClassName";
 import { toggleDarkMode } from "./utils/toggleDarkMode";
+import { addTodo } from "./services/addTodo";
 
 function App() {
   const [date, setDate] = useState(new Date());
@@ -15,52 +16,26 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeDate, setActiveDate] = useState(null); // 클릭한 날짜 상태 추가
 
+  // fetchTodos를 useCallback으로 정의
+  const fetchTodos = useCallback(async () => {
+    try {
+      const dateString = date.toISOString().split("T")[0];
+      const response = await axios.get(`/api/todos/${dateString}`);
+      const fetchedTodos = response.data;
+      setTodos((prevTodos) => ({ ...prevTodos, [dateString]: fetchedTodos }));
+    } catch (error) {
+      console.error("Error fetching todos:", error);
+    }
+  }, [date]); // date가 변경될 때마다 호출
+
   useEffect(() => {
-    const localTime = new Date(); // 시스템의 로컬 시간
-    const utcTime = new Date(localTime.getTime() + localTime.getTimezoneOffset() * 60000); // UTC 시간 계산
-  
-    console.log('Local Time:', localTime);
-    console.log('UTC Time:', utcTime);
-    const fetchTodos = async () => {
-      try {
-        const dateString = date.toISOString().split("T")[0];
-        const response = await axios.get(`/api/todos/${dateString}`);
-        const fetchedTodos = response.data;
-        setTodos((prevTodos) => ({ ...prevTodos, [dateString]: fetchedTodos }));
-      } catch (error) {
-        console.error("Error fetching todos:", error);
-      }
-    };
-    fetchTodos();
-  }, [date]);
-  
+    fetchTodos(); // 초기 로드 시 할 일 가져오기
+  }, [fetchTodos]); // fetchTodos를 의존성 배열에 추가
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
     setActiveDate(newDate.toISOString().split("T")[0]); // 클릭한 날짜 저장
   };
-
-  const addTodo = async () => {
-    if (!input) return;
-  
-    const localTime = new Date(); // 시스템의 로컬 시간
-    const utcTime = new Date(localTime.getTime() + localTime.getTimezoneOffset() * 60000); // UTC 시간 계산
-  
-    console.log('Local Time:', localTime);
-    console.log('UTC Time:', utcTime);
-  
-    // 로컬 날짜를 UTC로 변환하여 YYYY-MM-DD 형식으로 변환
-    const dateString = new Date(date).toISOString().split("T")[0];
-    const newTodo = { content: input, priority };
-  
-    try {
-      await axios.post(`/api/todos/${dateString}`, newTodo);
-      // ...
-    } catch (error) {
-      console.error("Error adding todo:", error);
-    }
-  };
-
 
   const toggleView = () => {
     setView((prevView) => (prevView === "month" ? "year" : "month"));
@@ -98,6 +73,11 @@ function App() {
       });
   };
 
+  const handleAddTodo = async () => {
+    await addTodo(input, date, priority);
+    fetchTodos(); // 할 일을 추가한 후에 다시 fetchTodos 호출
+    setInput(""); // 입력 필드 초기화
+  };
 
   return (
     <div className={isDarkMode ? "dark-mode" : ""}>
@@ -131,7 +111,7 @@ function App() {
             <option value={2}>Medium Priority</option>
             <option value={3}>Low Priority</option>
           </select>
-          <button onClick={addTodo}>Add</button>
+          <button onClick={handleAddTodo}>Add</button>
           <ul>
             {(todos[date.toISOString().split("T")[0]] || []).map(
               (todo, index) => (

@@ -82,14 +82,23 @@ function App() {
   };
 
   const deleteTodo = (dateString, index) => {
-    const updatedTodos = todos[dateString].filter((_, i) => i !== index); // 해당 인덱스를 제외한 todos 배열 생성
-
-    setTodos((prevTodos) => ({
-      ...prevTodos,
-      [dateString]: updatedTodos,
-    }));
+    const todo = todos[dateString][index]; // 해당 인덱스의 todo 가져오기
+    const todoId = todo.id; // todo의 고유 ID 값
+  
+    // 서버로 삭제 요청 전송
+    axios.delete(`/api/todos/${dateString}/${todoId}`)
+      .then(() => {
+        const updatedTodos = todos[dateString].filter((_, i) => i !== index); // 해당 인덱스를 제외한 todos 배열 생성
+        setTodos((prevTodos) => ({
+          ...prevTodos,
+          [dateString]: updatedTodos,
+        }));
+      })
+      .catch((error) => {
+        console.error("Error deleting todo:", error);
+      });
   };
-
+  
   const tileClassName = ({ date }) => {
     const dateString = date.toISOString().split("T")[0];
 

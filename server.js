@@ -64,7 +64,7 @@ app.delete('/api/todos/:date/:id', (req, res) => {
             return res.status(500).json({ error: err.message });
         }
         if (result.affectedRows === 0) {
-            return res.status(404).send('Todo not found');
+            return res.status(404).send('Todo not found'); // 삭제할 항목이 없을 때
         }
         res.status(204).send(); // 삭제 성공
     });

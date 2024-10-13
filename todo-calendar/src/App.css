@@ -36,21 +36,15 @@ h1 {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   background-color: white; 
 }
-
 .react-calendar__tile--now {
-  background: #ffcc00; 
-  color: white; 
+  background-color: #cd8dff;
+  color: #333;
 }
-
-.react-calendar__tile--active {
-  background: #007bff; 
-  color: white; 
+.react-calendar__tile--now:enabled:focus {
+  background-color: #9000ff;
 }
-
-/* To-Do가 있는 날짜에 색상 적용 */
-.has-todos {
-  background-color: #28a745; /* 원하는 색으로 변경 */
-  color: white; /* 글자 색상 */
+.react-calendar__tile--has-todos {
+  background-color: #ffeb3b; /* 메모가 있는 날의 배경색 */
 }
 
 .todo-list {
@@ -105,75 +99,33 @@ li {
   padding: 10px;
   border-bottom: 1px solid #eaeaea;
 }
-
 li:last-child {
-  border-bottom: none;
-}
-
-li button {
-  background-color: #dc3545;
-}
-
-li button:hover {
-  background-color: #c82333;
-}
-
-/* 다크 모드 스타일 */
-.dark-mode {
-  width: 100vw;
-  height: 100vh;
-  background-color: #121212;
-  display: flex; /* Flexbox 사용 */
-  align-items: center; /* 세로 가운데 정렬 */
-  justify-content: center; /* 가로 가운데 정렬 */
-}
-
-.dark-mode h1 {
-  color: #fff;
-}
-
-.dark-mode .container {
+  border-bottom: none; /* 마지막 항목의 경계선 제거 */
+  }
+  
+  .dark-mode {
   background-color: #333;
-}
-
-.dark-mode .todo-list {
-  background: #1e1e1e;
-  border: 1px solid #444;
-}
-
-.dark-mode input[type="text"],
-.dark-mode select {
-  background: #333;
-  border: 1px solid #555;
-  color: white; /* 글자 색상 */
-}
-
-@media (max-width: 600px) {
-  .container {
-    padding: 10px; /* 패딩 감소 */
+  color: white;
   }
-
-  h1 {
-    font-size: 24px; /* 글자 크기 조정 */
+  
+  .dark-mode .container {
+  background-color: #444;
+  color: white;
   }
-
-  input[type="text"],
-  .todo-list select {
-    width: 90%; /* 너비 100%로 조정 */
-    margin: 5px 0; /* 마진 조정 */
+  
+  .dark-mode .react-calendar {
+  background-color: #555; /* 다크 모드에서 캘린더 배경 */
   }
-
-  button {
-    width: 100%; /* 버튼 너비 100%로 조정 */
+  
+  .dark-mode button {
+  background-color: #666; /* 다크 모드에서 버튼 배경 */
   }
-
-  li {
-    flex-direction: column; /* 리스트 아이템 세로 정렬 */
-    align-items: flex-start; /* 왼쪽 정렬 */
+  
+  .dark-mode button:hover {
+  background-color: #777; /* 다크 모드에서 버튼 hover 시 배경 */
   }
-
-  li button {
-    width: 100%; /* 버튼 너비 100%로 조정 */
-    margin-top: 5px; /* 버튼 사이의 마진 추가 */
+  
+  .dark-mode input[type=“text”] {
+  background-color: #666; /* 다크 모드에서 입력 배경 /
+  color: white; / 다크 모드에서 입력 글자 색상 */
   }
-}

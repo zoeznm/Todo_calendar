@@ -8,6 +8,7 @@ import { toggleDarkMode } from "./utils/toggleDarkMode";
 import { addTodo } from "./services/addTodo";
 import { toggleTodo } from "./services/toggleTodo";
 import { deleteTodo } from "./services/deleteTodo";
+import { toggleView } from "./utils/toggleView";
 
 function App() {
   const [date, setDate] = useState(new Date());
@@ -38,10 +39,6 @@ function App() {
     setActiveDate(newDate.toISOString().split("T")[0]);
   };
 
-  const toggleView = () => {
-    setView((prevView) => (prevView === "month" ? "year" : "month"));
-  };
-
   const handleAddTodo = async () => {
     await addTodo(input, date, priority);
     fetchTodos();
@@ -55,7 +52,7 @@ function App() {
         <button onClick={() => toggleDarkMode(setIsDarkMode)}>
           {isDarkMode ? "Light Mode" : "Dark Mode"}
         </button>
-        <button onClick={toggleView}>
+        <button onClick={() => toggleView(view, setView)}> 
           {view === "month" ? "Year View" : "Month View"}
         </button>
         <Calendar

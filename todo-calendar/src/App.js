@@ -4,6 +4,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./App.css";
 import { tileClassName } from "./utils/tileClassName";
+import { toggleDarkMode } from "./utils/toggleDarkMode";
 
 function App() {
   const [date, setDate] = useState(new Date());
@@ -60,9 +61,6 @@ function App() {
     }
   };
 
-  const toggleDarkMode = () => {
-    setIsDarkMode((prevMode) => !prevMode);
-  };
 
   const toggleView = () => {
     setView((prevView) => (prevView === "month" ? "year" : "month"));
@@ -105,7 +103,7 @@ function App() {
     <div className={isDarkMode ? "dark-mode" : ""}>
       <div className="container">
         <h1>To-Do List with Calendar</h1>
-        <button onClick={toggleDarkMode}>
+        <button onClick={() => toggleDarkMode(setIsDarkMode)}>
           {isDarkMode ? "Light Mode" : "Dark Mode"}
         </button>
         <button onClick={toggleView}>

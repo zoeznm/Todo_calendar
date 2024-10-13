@@ -1,5 +1,3 @@
-// src/utils/tileClassName.js
-
 export const tileClassName = (activeDate) => ({ date }) => {
   const dateString = date.toISOString().split("T")[0];
 

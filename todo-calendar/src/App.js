@@ -7,6 +7,7 @@ import { tileClassName } from "./utils/tileClassName";
 import { toggleDarkMode } from "./utils/toggleDarkMode";
 import { addTodo } from "./services/addTodo";
 import { toggleTodo } from "./services/toggleTodo";
+import { deleteTodo } from "./services/deleteTodo";
 
 function App() {
   const [date, setDate] = useState(new Date());
@@ -39,23 +40,6 @@ function App() {
 
   const toggleView = () => {
     setView((prevView) => (prevView === "month" ? "year" : "month"));
-  };
-
-  const deleteTodo = (dateString, index) => {
-    const todo = todos[dateString][index];
-    const todoId = todo.id;
-
-    axios.delete(`/api/todos/${dateString}/${todoId}`)
-      .then(() => {
-        const updatedTodos = todos[dateString].filter((_, i) => i !== index);
-        setTodos((prevTodos) => ({
-          ...prevTodos,
-          [dateString]: updatedTodos,
-        }));
-      })
-      .catch((error) => {
-        console.error("Error deleting todo:", error);
-      });
   };
 
   const handleAddTodo = async () => {
@@ -104,8 +88,14 @@ function App() {
                   <input
                     type="checkbox"
                     checked={todo.completed}
-                    onChange={() =>
-                      toggleTodo(todos, date.toISOString().split("T")[0], index, setTodos) // 모듈화된 함수 호출
+                    onChange={
+                      () =>
+                        toggleTodo(
+                          todos,
+                          date.toISOString().split("T")[0],
+                          index,
+                          setTodos
+                        ) // 모듈화된 함수 호출
                     }
                   />
                   <span
@@ -117,7 +107,7 @@ function App() {
                   </span>
                   <button
                     onClick={() =>
-                      deleteTodo(date.toISOString().split("T")[0], index)
+                        deleteTodo(date.toISOString().split("T")[0], index, todos, setTodos)
                     }
                   >
                     Delete

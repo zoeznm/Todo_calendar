@@ -3,6 +3,7 @@ import axios from "axios";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./App.css";
+import { tileClassName } from "./utils/tileClassName";
 
 function App() {
   const [date, setDate] = useState(new Date());
@@ -98,13 +99,7 @@ function App() {
         console.error("Error deleting todo:", error);
       });
   };
-  
-  const tileClassName = ({ date }) => {
-    const dateString = date.toISOString().split("T")[0];
 
-    if (activeDate === dateString) return "active-date"; // 클릭한 날짜만 클래스 적용
-    return null; // 기타 색상 변경 없음
-  };
 
   return (
     <div className={isDarkMode ? "dark-mode" : ""}>
@@ -119,7 +114,7 @@ function App() {
         <Calendar
           onChange={handleDateChange}
           value={date}
-          tileClassName={tileClassName}
+          tileClassName={tileClassName(activeDate)}
           view={view}
           onViewChange={({ activeStartDate }) => setDate(activeStartDate)}
         />

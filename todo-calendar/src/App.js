@@ -6,7 +6,6 @@ import "./App.css";
 import { tileClassName } from "./utils/tileClassName";
 import { toggleDarkMode } from "./utils/toggleDarkMode";
 import { addTodo } from "./services/addTodo";
-import { toggleTodo } from "./services/toggleTodo";
 import { deleteTodo } from "./services/deleteTodo";
 import { toggleView } from "./utils/toggleView";
 
@@ -38,6 +37,20 @@ function App() {
     setDate(newDate);
     setActiveDate(newDate.toISOString().split("T")[0]);
   };
+  
+  const toggleTodo = (todos, dateString, index, setTodos) => {
+    const updatedTodos = todos[dateString].map((todo, i) => {
+      if (i === index) {
+        return { ...todo, completed: !todo.completed }; // completed 상태를 반전
+      }
+      return todo;
+    });
+
+    setTodos((prevTodos) => ({
+      ...prevTodos,
+      [dateString]: updatedTodos,
+    }));
+  };
 
   const handleAddTodo = async () => {
     await addTodo(input, date, priority);
@@ -52,7 +65,7 @@ function App() {
         <button onClick={() => toggleDarkMode(setIsDarkMode)}>
           {isDarkMode ? "Light Mode" : "Dark Mode"}
         </button>
-        <button onClick={() => toggleView(view, setView)}> 
+        <button onClick={() => toggleView(view, setView)}>
           {view === "month" ? "Year View" : "Month View"}
         </button>
         <Calendar
@@ -104,7 +117,12 @@ function App() {
                   </span>
                   <button
                     onClick={() =>
-                        deleteTodo(date.toISOString().split("T")[0], index, todos, setTodos)
+                      deleteTodo(
+                        date.toISOString().split("T")[0],
+                        index,
+                        todos,
+                        setTodos
+                      )
                     }
                   >
                     Delete

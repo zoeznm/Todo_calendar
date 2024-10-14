@@ -10,11 +10,13 @@ app.use(express.json());
 
 // MySQL 데이터베이스 연결 설정
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root', // MySQL 사용자 이름
-    password: 'Duddbqh231!!', // MySQL 비밀번호
-    database: 'todo' // 사용할 데이터베이스 이름
+    host: 'database-2.c7w4ios4idlw.ap-northeast-2.rds.amazonaws.com', // RDS 엔드포인트
+    user: 'matomabo',                    // RDS 사용자 이름
+    password: 'duddbqh231!!',                // RDS 비밀번호
+    database: 'todo',          // 데이터베이스 이름
+    port: '3306'                              // 기본 포트 (MySQL의 경우)
 });
+
 
 // 연결 확인
 db.connect((err) => {
@@ -70,9 +72,12 @@ app.delete('/api/todos/:date/:id', (req, res) => {
     });
 });
 
+// 정적 파일 제공
+app.use(express.static(path.join(__dirname, 'todo-calendar/static')));
+
 // 나머지 모든 경로에 대해 index.html 반환
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'todo-calendar', 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, todo-calendar/build/index.html));
 });
 
 app.listen(PORT, () => {
